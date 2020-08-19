@@ -8,22 +8,29 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    events: []
+    initialEvents: [],
+    currentEvents: []
   },
   getters: {
-    events(state){
-      return state.events;
+    initialEvents(state){
+      return state.initialEvents;
+    },
+    currentEvents(state) {
+      return state.currentEvents;
     }
   },
   mutations: {
-    setEvents(state, events){
-      state.events = events;
+    setInitialEvents(state, events){
+      state.initialEvents = events;
+    },
+    setCurrentEvents(state, events) {
+      state.currentEvents = events;
     }
   },
   actions: {
     async fetchEvents({commit}){
       const res = await axios.get(API_ENDPOINT_EVENTS);
-      commit('setEvents', res.data);
+      commit('setInitialEvents', res.data);
     }
   }
 })

@@ -4,10 +4,10 @@ export default [
   {
     path: '/',
     redirect: '/events'
-    
   },
   {
     path: '/events',
     component: Calendar
-  }
+  },
+
 ];

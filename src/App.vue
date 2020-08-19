@@ -1,12 +1,11 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/events">Events</router-link>
+      <router-link to="/events" exact >Events</router-link>
       <router-link to="/login">Signin</router-link>
       <router-link to="/about">About</router-link>
     </nav>
     <router-view></router-view>
-    <calendar />
   </div>
 </template>
 

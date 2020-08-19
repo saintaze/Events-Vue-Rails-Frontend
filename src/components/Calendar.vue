@@ -10,32 +10,34 @@
           <i>{{ arg.event.title }}</i>
         </template>
     </FullCalendar>
-    <h2>Events ({{currentEvents.length}})</h2>
-    <table class="events-table">
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Title</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Last All Day</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="event in currentEvents" :key="event.id">
-          <td>{{event.id}}</td>
-          <td>{{event.title}}</td>
-          <td>{{event.startStr}}</td>
-          <td>{{event.endStr}}</td>
-           <td>{{event.allDay ? 'Yes' : 'False'}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-if="currentEvents.length" class="events">
+      <h2>Events ({{currentEvents.length}})</h2>
+      <table class="events-table">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Last All Day</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(event, index) in currentEvents" :key="index">
+            <!-- <td>{{index + 1}}</td> -->
+            <td>{{event.title}}</td>
+            <td>{{event.startStr}}</td>
+            <td>{{event.endStr}}</td>
+            <td>{{event.allDay ? 'Yes' : 'False'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
- 
-    
-
 </template>
+
+
+/////////////  JS
 
 <script>
 import FullCalendar from '@fullcalendar/vue'
@@ -55,8 +57,7 @@ export default {
 
   data: () => {
     return {
-      calendarOptions: {},
-      currentEvents: []
+      calendarOptions: {}
     }
   },
   computed: {
@@ -106,24 +107,27 @@ export default {
         eventChange: this.handleUpdateEvent,
         eventsSet: this.handleEventsSet
       }
+    },
+    currentEvents(){
+      return this.$store.getters.currentEvents;
     }
   },
   async created() {
     this.calendarOptions = this.options;
-    await this.$store.dispatch('fetchEvents', {component: this});
-    this.calendarOptions.events = this.$store.getters.events;
+    await this.$store.dispatch('fetchEvents');
+    this.calendarOptions.events = this.$store.getters.initialEvents;
   },
   methods: {
     handleDateClick(selectInfo) {
       let title = prompt('Please enter a new title for your event')
       let calendarApi = selectInfo.view.calendar
-      calendarApi.unselect() // clear date selection,
+      calendarApi.unselect() 
       if (!title) return;
       const newEvent = {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        allDay: selectInfo.allDay
+        allDay: false//selectInfo.allDay
       }
       calendarApi.addEvent(newEvent);
       
@@ -134,19 +138,18 @@ export default {
       }
     },
     handleEventsSet(events){
-      this.currentEvents = events;
-      console.log(events) 
+      this.$store.commit('setCurrentEvents', events)
     },
-    async handleAddEvent(event){
-      const res = await axios.post(API_ENDPOINT_EVENTS, event);
-      console.log('post', res);
+    async handleAddEvent(eventData){
+      console.log('ADD', eventData)
+      const res = await axios.post(API_ENDPOINT_EVENTS, eventData.event);
     },
     async handleRemoveEvent(eventData){
+      console.log('DELETE', eventData)
       const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
     },
     async handleUpdateEvent(eventData){
       const res = await axios.put(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`, eventData.event);
-      console.log('updateEvent', res.data)
     }
   }
 }
@@ -254,6 +257,11 @@ b { /* used for event dates/times */
   max-width: 1100px;
   margin: 0 auto;
 }
+
+// .fc-event {
+//   background-color: #378ad3;
+//   color: white;
+// }
 
 </style>
 
