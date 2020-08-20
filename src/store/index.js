@@ -30,6 +30,10 @@ export default new Vuex.Store({
       console.log('MU1', state.initialEvents)
       state.initialEvents = [...state.initialEvents, event]
       console.log('MU2', state.initialEvents)
+    },
+    deleteEvent(state, id) {
+      console.log('MU DEL', id)
+      state.initialEvents =  state.initialEvents.filter(event =>  event.id !== id)
     }
   },
   actions: {

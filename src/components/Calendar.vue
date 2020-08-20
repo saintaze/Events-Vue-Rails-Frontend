@@ -100,10 +100,10 @@ export default {
     },
     eventHandlers(){
       return {
-        select: this.handleDateClick,
-        eventClick: this.handleEventClick,
+        select: this.handleAddEvent,
+        eventClick: this.handleRemoveEvent,
         // eventAdd: this.handleAddEvent,
-        eventRemove: this.handleRemoveEvent,
+        // eventRemove: this.handleRemoveEvent,
         eventChange: this.handleUpdateEvent,
         eventsSet: this.handleEventsSet
       }
@@ -129,7 +129,7 @@ export default {
     this.calendarOptions.events = this.$store.getters.initialEvents;
   }, 
   methods: {
-    async handleDateClick(selectInfo) {
+    async handleAddEvent(selectInfo) {
       let title = prompt('Please enter a new title for your event')
       let calendarApi = selectInfo.view.calendar
       calendarApi.unselect() 
@@ -140,8 +140,6 @@ export default {
         end: selectInfo.endStr,
         allDay: true//selectInfo.allDay
       }
-      // calendarApi.addEvent(newEvent);
-      // this.handleAddEvent(event);
       console.log('SEND SERVER', {event: newEvent})
       const res = await axios.post(API_ENDPOINT_EVENTS, {event: newEvent});
       
@@ -149,22 +147,27 @@ export default {
       this.$store.commit('addEvent', res.data.event);
 
     },
-    handleEventClick(clickInfo) {
-      if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-        clickInfo.event.remove()
+    async handleRemoveEvent(eventData) {
+      const shouldDelete = confirm(`Are you sure you want to delete the event '${eventData.event.title}'`)
+      if (shouldDelete) {
+        // clickInfo.event.remove()
+        console.log('DELETE', eventData.event)
+        const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
+        console.log('DELETE RES', res.data.event.id)
+        this.$store.commit('deleteEvent', res.data.event.id)
       }
     },
     handleEventsSet(events){
       this.$store.commit('setCurrentEvents', events)
     },
-    async handleAddEvent(eventData, event){
-      const res = await axios.post(API_ENDPOINT_EVENTS, {event: eventData});
-      this.$store.commit('addEvent', res);
-    },
-    async handleRemoveEvent(eventData){
-      console.log('DELETE', eventData)
-      const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
-    },
+    // async handleAddEvent(eventData, event){
+    //   const res = await axios.post(API_ENDPOINT_EVENTS, {event: eventData});
+    //   this.$store.commit('addEvent', res);
+    // },
+    // async handleRemoveEvent(eventData){
+    //   console.log('DELETE', eventData)
+    //   const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
+    // },
     async handleUpdateEvent(eventData){
       const res = await axios.put(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`, eventData.event);
     }
