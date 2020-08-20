@@ -105,7 +105,7 @@ export default {
         // eventAdd: this.handleAddEvent,
         // eventRemove: this.handleRemoveEvent,
         eventChange: this.handleUpdateEvent,
-        eventsSet: this.handleEventsSet
+        // eventsSet: this.handleEventsSet
       }
     },
     currentEvents(){
@@ -157,9 +157,9 @@ export default {
         this.$store.commit('deleteEvent', res.data.event.id)
       }
     },
-    handleEventsSet(events){
-      this.$store.commit('setCurrentEvents', events)
-    },
+    // handleEventsSet(events){
+    //   this.$store.commit('setCurrentEvents', events)
+    // },
     // async handleAddEvent(eventData, event){
     //   const res = await axios.post(API_ENDPOINT_EVENTS, {event: eventData});
     //   this.$store.commit('addEvent', res);
@@ -169,7 +169,13 @@ export default {
     //   const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
     // },
     async handleUpdateEvent(eventData){
-      const res = await axios.put(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`, eventData.event);
+      console.log('UPDATE', eventData.event)
+      const {startStr, endStr, id} = eventData.event;
+      const updatedEvent = {id, event: {start: startStr, end: endStr}}
+      const res = await axios.patch(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`, updatedEvent);
+      console.log('UP RES', res)
+      this.$store.commit('updateEvent', res.data)
+      // console.log('UPdayte res', res)
     }
   }
 }

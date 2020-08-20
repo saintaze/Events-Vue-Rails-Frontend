@@ -27,6 +27,7 @@ export default new Vuex.Store({
       state.currentEvents = events;
     },
     addEvent(state, event){
+      console.log('ADD', event)
       console.log('MU1', state.initialEvents)
       state.initialEvents = [...state.initialEvents, event]
       console.log('MU2', state.initialEvents)
@@ -34,6 +35,15 @@ export default new Vuex.Store({
     deleteEvent(state, id) {
       console.log('MU DEL', id)
       state.initialEvents =  state.initialEvents.filter(event =>  event.id !== id)
+    },
+    updateEvent(state, {id, start, end}){
+      console.log('UPADTE MU', id, start, end)
+      const oldEventIdx = state.initialEvents.findIndex(event =>  event.id === +id);
+      if (oldEventIdx >= 0){
+        state.initialEvents[oldEventIdx].start = start;
+        state.initialEvents[oldEventIdx].end = end
+      }
+     
     }
   },
   actions: {
