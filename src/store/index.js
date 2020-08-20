@@ -17,7 +17,7 @@ export default new Vuex.Store({
     },
     currentEvents(state) {
       return state.currentEvents;
-    }
+    },
   },
   mutations: {
     setInitialEvents(state, events){
@@ -25,6 +25,11 @@ export default new Vuex.Store({
     },
     setCurrentEvents(state, events) {
       state.currentEvents = events;
+    },
+    addEvent(state, event){
+      console.log('MU1', state.initialEvents)
+      state.initialEvents = [...state.initialEvents, event]
+      console.log('MU2', state.initialEvents)
     }
   },
   actions: {

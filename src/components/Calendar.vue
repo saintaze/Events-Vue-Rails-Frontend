@@ -10,12 +10,12 @@
           <i>{{ arg.event.title }}</i>
         </template>
     </FullCalendar>
-    <div v-if="currentEvents.length" class="events">
-      <h2>Events ({{currentEvents.length}})</h2>
+    <div v-if="myEvents.length" class="events">
+      <h2>Events ({{myEvents.length}})</h2>
       <table class="events-table">
         <thead>
           <tr>
-            <th>No.</th>
+            <th>Id</th>
             <th>Title</th>
             <th>Start Date</th>
             <th>End Date</th>
@@ -23,11 +23,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(event, index) in currentEvents" :key="index">
-            <!-- <td>{{index + 1}}</td> -->
+          <tr v-for="(event, index) in myEvents" :key="index">
+            <td>{{event.id}}</td>
             <td>{{event.title}}</td>
-            <td>{{event.startStr}}</td>
-            <td>{{event.endStr}}</td>
+            <td>{{event.start}}</td>
+            <td>{{event.end}}</td>
             <td>{{event.allDay ? 'Yes' : 'False'}}</td>
           </tr>
         </tbody>
@@ -102,7 +102,7 @@ export default {
       return {
         select: this.handleDateClick,
         eventClick: this.handleEventClick,
-        eventAdd: this.handleAddEvent,
+        // eventAdd: this.handleAddEvent,
         eventRemove: this.handleRemoveEvent,
         eventChange: this.handleUpdateEvent,
         eventsSet: this.handleEventsSet
@@ -110,15 +110,26 @@ export default {
     },
     currentEvents(){
       return this.$store.getters.currentEvents;
+    },
+    myEvents(){
+      this.calendarOptions.events = this.$store.getters.initialEvents;
+      console.log('MY EVENTS', this.$store.getters.initialEvents)
+      return this.$store.getters.initialEvents;
     }
   },
+  // watch: {
+  //   myEvents(){
+  //     this.calendarOptions.events = this.$store.getters.initialEvents
+
+  //   }
+  // },
   async created() {
     this.calendarOptions = this.options;
     await this.$store.dispatch('fetchEvents');
     this.calendarOptions.events = this.$store.getters.initialEvents;
-  },
+  }, 
   methods: {
-    handleDateClick(selectInfo) {
+    async handleDateClick(selectInfo) {
       let title = prompt('Please enter a new title for your event')
       let calendarApi = selectInfo.view.calendar
       calendarApi.unselect() 
@@ -127,10 +138,16 @@ export default {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        allDay: false//selectInfo.allDay
+        allDay: true//selectInfo.allDay
       }
-      calendarApi.addEvent(newEvent);
+      // calendarApi.addEvent(newEvent);
+      // this.handleAddEvent(event);
+      console.log('SEND SERVER', {event: newEvent})
+      const res = await axios.post(API_ENDPOINT_EVENTS, {event: newEvent});
       
+      console.log('ADD', res.data.event)
+      this.$store.commit('addEvent', res.data.event);
+
     },
     handleEventClick(clickInfo) {
       if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
@@ -140,9 +157,9 @@ export default {
     handleEventsSet(events){
       this.$store.commit('setCurrentEvents', events)
     },
-    async handleAddEvent(eventData){
-      console.log('ADD', eventData)
-      const res = await axios.post(API_ENDPOINT_EVENTS, eventData.event);
+    async handleAddEvent(eventData, event){
+      const res = await axios.post(API_ENDPOINT_EVENTS, {event: eventData});
+      this.$store.commit('addEvent', res);
     },
     async handleRemoveEvent(eventData){
       console.log('DELETE', eventData)
