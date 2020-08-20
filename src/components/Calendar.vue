@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(event, index) in myEvents" :key="index">
+          <tr v-for="event in myEvents" :key="event.id">
             <td>{{event.id}}</td>
             <td>{{event.title}}</td>
             <td>{{event.start}}</td>
