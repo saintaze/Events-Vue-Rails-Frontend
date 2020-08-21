@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Calendar from '@/components/Calendar.vue'
+import CalendarEvents from '@/components/CalendarEvents.vue'
 
 Vue.use(VueRouter)
 
@@ -11,7 +11,7 @@ const routes = [
   },
   {
     path: '/events',
-    component: Calendar
+    component: CalendarEvents
   }
 ];
 
