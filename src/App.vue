@@ -1,12 +1,5 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/events" exact >Events</router-link>
-      <router-link to="/login">Signin</router-link>
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -21,8 +14,4 @@ export default {
 </script>
 
 <style lang="scss">
- html, body {
-   padding: 0,;
-   margin: 0;
- }
 </style>

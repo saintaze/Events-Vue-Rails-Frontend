@@ -8,48 +8,35 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    initialEvents: [],
-    currentEvents: []
+    events: []
   },
   getters: {
-    initialEvents(state){
-      return state.initialEvents;
-    },
-    currentEvents(state) {
-      return state.currentEvents;
-    },
+    events(state){
+      return state.events;
+    }
   },
   mutations: {
-    setInitialEvents(state, events){
-      state.initialEvents = events;
-    },
-    setCurrentEvents(state, events) {
-      state.currentEvents = events;
+    setEvents(state, events){
+      state.events = events;
     },
     addEvent(state, event){
-      console.log('ADD', event)
-      console.log('MU1', state.initialEvents)
-      state.initialEvents = [...state.initialEvents, event]
-      console.log('MU2', state.initialEvents)
+      state.events = [...state.events, event]
     },
     deleteEvent(state, id) {
-      console.log('MU DEL', id)
-      state.initialEvents =  state.initialEvents.filter(event =>  event.id !== id)
+      state.events =  state.events.filter(event =>  event.id !== id)
     },
     updateEvent(state, {id, start, end}){
-      console.log('UPADTE MU', id, start, end)
-      const oldEventIdx = state.initialEvents.findIndex(event =>  event.id === +id);
+      const oldEventIdx = state.events.findIndex(event =>  event.id === +id);
       if (oldEventIdx >= 0){
-        state.initialEvents[oldEventIdx].start = start;
-        state.initialEvents[oldEventIdx].end = end
+        state.events[oldEventIdx].start = start;
+        state.events[oldEventIdx].end = end
       }
-     
     }
   },
   actions: {
     async fetchEvents({commit}){
       const res = await axios.get(API_ENDPOINT_EVENTS);
-      commit('setInitialEvents', res.data);
+      commit('setEvents', res.data);
     }
   }
 })

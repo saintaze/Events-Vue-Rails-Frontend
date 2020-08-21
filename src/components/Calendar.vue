@@ -1,5 +1,4 @@
 <template>
-
   <div class="main">
     <FullCalendar
         class='demo-app-calendar'
@@ -19,16 +18,16 @@
             <th>Title</th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th>Last All Day</th>
+            <th>Lasts All Day</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="event in myEvents" :key="event.id">
             <td>{{event.id}}</td>
             <td>{{event.title}}</td>
-            <td>{{event.start}}</td>
-            <td>{{event.end}}</td>
-            <td>{{event.allDay ? 'Yes' : 'False'}}</td>
+            <td>{{event.start | dateFormat}}</td>
+            <td>{{event.end | dateFormat}}</td>
+            <td>{{event.allDay ? 'Yes' : 'No'}}</td>
           </tr>
         </tbody>
       </table>
@@ -37,24 +36,21 @@
 </template>
 
 
-/////////////  JS
-
 <script>
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import moment from 'moment';
 import axios from 'axios';
 
 import {API_ENDPOINT_EVENTS} from '@/constants';
-
 
 export default {
   name: 'calendar',
   components: {
     FullCalendar // make the <FullCalendar> tag available
   },
-
   data: () => {
     return {
       calendarOptions: {}
@@ -95,183 +91,117 @@ export default {
         selectable: true,
         selectMirror: true,
         dayMaxEvents: true,
-        weekends: true
+        weekends: true,
+        eventDisplay: 'block',
+        eventTimeFormat: {
+          hour: '2-digit',
+          minute: '2-digit',
+          meridiem: true
+        }
       }
     },
     eventHandlers(){
       return {
         select: this.handleAddEvent,
         eventClick: this.handleRemoveEvent,
-        // eventAdd: this.handleAddEvent,
-        // eventRemove: this.handleRemoveEvent,
-        eventChange: this.handleUpdateEvent,
-        // eventsSet: this.handleEventsSet
+        eventChange: this.handleUpdateEvent
       }
     },
-    currentEvents(){
-      return this.$store.getters.currentEvents;
-    },
     myEvents(){
-      this.calendarOptions.events = this.$store.getters.initialEvents;
-      console.log('MY EVENTS', this.$store.getters.initialEvents)
-      return this.$store.getters.initialEvents;
+      this.calendarOptions.events = this.$store.getters.events;
+      return this.$store.getters.events;
     }
   },
-  // watch: {
-  //   myEvents(){
-  //     this.calendarOptions.events = this.$store.getters.initialEvents
-
-  //   }
-  // },
   async created() {
     this.calendarOptions = this.options;
     await this.$store.dispatch('fetchEvents');
-    this.calendarOptions.events = this.$store.getters.initialEvents;
+    this.calendarOptions.events = this.$store.getters.events;
   }, 
   methods: {
     async handleAddEvent(selectInfo) {
-      let title = prompt('Please enter a new title for your event')
-      let calendarApi = selectInfo.view.calendar
-      calendarApi.unselect() 
+      let title = prompt('Please enter a new title for your event');
+      let calendarApi = selectInfo.view.calendar;
+      calendarApi.unselect(); 
       if (!title) return;
       const newEvent = {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        allDay: true//selectInfo.allDay
+        allDay: selectInfo.allDay,
+        backgroundColor: selectInfo.allDay ? 'purple': 'green',
+        borderColor: selectInfo.allDay ? 'purple': 'green'
       }
-      console.log('SEND SERVER', {event: newEvent})
       const res = await axios.post(API_ENDPOINT_EVENTS, {event: newEvent});
-      
-      console.log('ADD', res.data.event)
       this.$store.commit('addEvent', res.data.event);
-
     },
     async handleRemoveEvent(eventData) {
-      const shouldDelete = confirm(`Are you sure you want to delete the event '${eventData.event.title}'`)
+      const shouldDelete = confirm(`Are you sure you want to delete the event '${eventData.event.title}'`);
       if (shouldDelete) {
-        // clickInfo.event.remove()
-        console.log('DELETE', eventData.event)
         const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
-        console.log('DELETE RES', res.data.event.id)
-        this.$store.commit('deleteEvent', res.data.event.id)
+        this.$store.commit('deleteEvent', res.data.event.id);
       }
     },
-    // handleEventsSet(events){
-    //   this.$store.commit('setCurrentEvents', events)
-    // },
-    // async handleAddEvent(eventData, event){
-    //   const res = await axios.post(API_ENDPOINT_EVENTS, {event: eventData});
-    //   this.$store.commit('addEvent', res);
-    // },
-    // async handleRemoveEvent(eventData){
-    //   console.log('DELETE', eventData)
-    //   const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
-    // },
     async handleUpdateEvent(eventData){
-      console.log('UPDATE', eventData.event)
       const {startStr, endStr, id} = eventData.event;
       const updatedEvent = {id, event: {start: startStr, end: endStr}}
       const res = await axios.patch(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`, updatedEvent);
-      console.log('UP RES', res)
-      this.$store.commit('updateEvent', res.data)
-      // console.log('UPdayte res', res)
+      this.$store.commit('updateEvent', res.data);
+    }
+  },
+  filters: {
+    dateFormat(dateStr) {
+      return moment(dateStr).format("ddd, MMM Do YYYY, h:mm a");
     }
   }
 }
 </script>
 
 
-
 <style lang='scss'>
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
 
 h2 {
- font-family: Arial, Helvetica, sans-serif;
+ font-family:'Source Sans Pro', sans-serif;
  max-width: 1100px;
  margin: 40px auto;
 }
 
 .events-table {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:'Source Sans Pro', sans-serif;
   width: 1100px;
 	max-width: 1100px !important; 
 	border-collapse: collapse; 
 	margin: 0 auto 50px;
   
   tr:nth-of-type(odd) { 
-	  background: rgb(255, 250,229); 
+	  background: #EEEEEE; 
 	}
 
   th { 
-    background: rgb(55, 138, 211); 
+    background: #111; 
     color: white; 
-    font-weight: normal
+    font-weight: normal;
+    font-size: 16px;
 	}
 
   td, th { 
+    text-align: center !important;
     padding: 10px; 
-    border: 1px solid #ccc; 
     text-align: left; 
-    font-size: 16px;
   }
 
   td {
     font-size: 14px;
   }
-
 }
 
-@media only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px)  {
-
-	.events-table { 
-	  	width: 100%; 
-	}
-
-	/* Force table to not be like tables anymore */
-	.events-table, .events-table thead, .events-table tbody, .events-table th, .events-table td, .events-table tr { 
-		display: block; 
-	}
-	
-	/* Hide table headers (but not display: none;, for accessibility) */
-	.events-table thead tr { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-	
-	.events-table tr { border: 1px solid #ccc; }
-	
-	.events-table td { 
-		/* Behave  like a "row" */
-		border: none;
-		border-bottom: 1px solid #eee; 
-		position: relative;
-		padding-left: 50%; 
-	}
-
-	.events-table td:before { 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-		/* Label the data */
-		content: attr(data-column);
-
-		color: #000;
-		font-weight: bold;
-	}
-
+i {
+  font-style: normal;
 }
 
-
-
-b { /* used for event dates/times */
-  margin-right: 3px;
+b {
+  font-size: 12.5px;;
+  margin-right: 5px;
 }
 
 .main {
@@ -279,16 +209,13 @@ b { /* used for event dates/times */
   padding: 3em;
 }
 
-.fc { /* the calendar root */
+.fc { 
   max-width: 1100px;
   margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  background-color: white;
 }
-
-// .fc-event {
-//   background-color: #378ad3;
-//   color: white;
-// }
-
 </style>
 
 
