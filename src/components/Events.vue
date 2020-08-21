@@ -25,14 +25,12 @@
 </template>
 
 <script>
-
 import moment from 'moment';
 
 export default {
   name: 'events',
   computed: {
     myEvents(){
-      
       return this.$store.getters.events;
     }
   },
@@ -62,6 +60,11 @@ export default {
       background-color: #eee; 
     }
 
+    td, th { 
+      text-align: center;
+      padding: 10px;
+    }
+
     th { 
       background: #111; 
       color: white; 
@@ -71,11 +74,6 @@ export default {
 
     td {
       font-size: 14px;
-    }
-
-    td, th { 
-      text-align: center;
-      padding: 10px;
     }
   }
 }

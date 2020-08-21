@@ -85,7 +85,7 @@ export default {
   async created() {
     this.calendarOptions = this.options;
     await this.$store.dispatch('fetchEvents');
-    this.calendarOptions.events = this.$store.getters.events;
+    this.syncEvents();
   }, 
   methods: {
     syncEvents(){

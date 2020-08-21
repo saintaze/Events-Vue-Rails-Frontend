@@ -23,7 +23,7 @@ export default {
 
 .main {
   font-family: Arial, Helvetica, sans-serif;
-  max-width: 1000px;
+  max-width: 1050px;
   margin: 50px auto;
   padding: 0 1rem;
 }
