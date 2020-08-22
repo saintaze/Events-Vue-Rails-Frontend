@@ -24,5 +24,13 @@ describe('Toolbar', () => {
   it('should render Html correctly', () => {
     console.log(wrapper.html())
     expect(wrapper.html()).toMatchSnapshot()
-  })
+  });
+
+  it('should contain element with a header class', () => {
+    expect(wrapper.find('.header')).toBeTruthy()
+  });
+
+  it('Header element should contain brand name "Event App"', () => {
+    expect(wrapper.find('.header').text()).toBe('Event App')
+  });
 });
