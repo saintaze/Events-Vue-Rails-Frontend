@@ -9,7 +9,7 @@
 import Toolbar from '@/components/Toolbar.vue'
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     Toolbar
   }
