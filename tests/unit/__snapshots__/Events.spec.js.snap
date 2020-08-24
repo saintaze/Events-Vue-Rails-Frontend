@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Events Events are empty (events.length === 0) should render html correctly 1`] = `""`;
+
+exports[`Events Events are present (events.length > 0) should render html correctly 1`] = `
+<div class="events">
+  <h2 class="events-header">Events (2)</h2>
+  <table class="events-table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Lasts All Day</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>this is all we have </td>
+        <td>Tue, Jul 28th 2020, 12:00 am</td>
+        <td>Wed, Jul 29th 2020, 12:00 am</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>walking all night </td>
+        <td>Tue, Aug 25th 2020, 7:00 am</td>
+        <td>Tue, Aug 25th 2020, 10:00 am</td>
+        <td>No</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

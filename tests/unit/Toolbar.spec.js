@@ -1,36 +1,27 @@
 import { shallowMount } from '@vue/test-utils';
 import Toolbar from '@/components/Toolbar.vue'; 
+import { BRAND_NAME } from '@/constants.js';
 
 let wrapper;
 
 beforeEach(() => {
-  wrapper = shallowMount(Toolbar, {
-    propsData: {},
-    mocks: {},
-    stubs: {},
-    methods: {},
-  });
-});
+  wrapper = shallowMount(Toolbar);
+})
 
 afterEach(() => {
   wrapper.destroy();
 });
 
 describe('Toolbar', () => {
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance).toBeTruthy();
+  it('should render html correctly', () => {
+    expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('should render Html correctly', () => {
-    console.log(wrapper.html())
-    expect(wrapper.html()).toMatchSnapshot()
+  it('should contain header element', () => {
+    expect(wrapper.find('.header').exists()).toBe(true)
   });
 
-  it('should contain element with a header class', () => {
-    expect(wrapper.find('.header')).toBeTruthy()
+  it(`header element should contain brand name ${BRAND_NAME}`, () => {
+    expect(wrapper.find('.header').text()).toBe(BRAND_NAME);
   });
-
-  it('Header element should contain brand name "Event App"', () => {
-    expect(wrapper.find('.header').text()).toBe('Event App')
-  });
-});
+})

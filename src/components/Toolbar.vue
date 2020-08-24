@@ -1,12 +1,19 @@
 <template>
   <header class="header">
-    Event App
+    {{brandName}}
   </header>
 </template>
 
 <script>
+import { BRAND_NAME } from '@/constants.js';
+
 export default {
-  name: 'toolbar'
+  name: 'toolbar',
+  data(){
+    return {
+      brandName: BRAND_NAME
+    }
+  }
 }
 </script>
 

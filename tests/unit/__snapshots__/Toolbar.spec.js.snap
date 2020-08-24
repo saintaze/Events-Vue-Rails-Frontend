@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Toolbar should render Html correctly 1`] = `
+exports[`Toolbar should render html correctly 1`] = `
 <header class="header">
   Event App
 </header>
