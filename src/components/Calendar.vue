@@ -1,12 +1,9 @@
 <template>
-  <FullCalendar
-      class='demo-app-calendar'
-      :options='options'
-    >
-      <template v-slot:eventContent='arg'>
+  <FullCalendar :options='options' >
+      <!-- <template v-slot:eventContent='arg'>
         <b>{{ arg.timeText }}</b>
         <i>{{ arg.event.title }}</i>
-      </template>
+      </template> -->
   </FullCalendar>
 </template>
 
