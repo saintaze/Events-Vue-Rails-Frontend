@@ -4,7 +4,7 @@ import CalendarEvents from '@/components/CalendarEvents.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+export const routes = [
   {
     path: '/',
     redirect: '/events'

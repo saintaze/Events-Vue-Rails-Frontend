@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CalendarEvents should render html correctly 1`] = `
+<main class="main">
+  <calendar-stub></calendar-stub>
+  <events-stub></events-stub>
+</main>
+`;

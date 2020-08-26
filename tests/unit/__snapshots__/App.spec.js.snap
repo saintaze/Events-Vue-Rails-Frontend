@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App should render html correctly 1`] = `
+<div>
+  <toolbar-stub></toolbar-stub>
+  <router-view-stub></router-view-stub>
+</div>
+`;
