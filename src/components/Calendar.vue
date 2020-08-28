@@ -87,30 +87,32 @@ export default {
       let calendarApi = selectInfo.view.calendar;
       calendarApi.unselect(); 
       if (!title) return;
+      const {startStr: start, endStr: end, allDay} = selectInfo;
       const newEvent = {
         title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-        backgroundColor: selectInfo.allDay ? 'purple': 'green',
-        borderColor: selectInfo.allDay ? 'purple': 'green'
+        start,
+        end,
+        allDay,
+        backgroundColor: allDay ? 'purple': 'green',
+        borderColor: allDay ? 'purple': 'green'
       }
       const res = await axios.post(API_ENDPOINT_EVENTS, {event: newEvent});
       this.$store.commit('addEvent', res.data.event);
       this.syncEvents();
     },
     async handleRemoveEvent(eventData) {
-      const shouldDelete = confirm(`Are you sure you want to delete the event '${eventData.event.title}'`);
+      const {id, title} = eventData.event;
+      const shouldDelete = confirm(`Are you sure you want to delete the event '${title}'`);
       if (shouldDelete) {
-        const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`);
+        const res = await axios.delete(`${API_ENDPOINT_EVENTS}/${id}`);
         this.$store.commit('deleteEvent', res.data.event.id);
         this.syncEvents();  
       }
     },
     async handleUpdateEvent(eventData){
-      const {startStr, endStr, id} = eventData.event;
-      const updatedEvent = {id, event: {start: startStr, end: endStr}}
-      const res = await axios.patch(`${API_ENDPOINT_EVENTS}/${eventData.event.id}`, updatedEvent);
+      const {id, startStr: start, endStr: end} = eventData.event;
+      const updatedEvent = {event: {start, end}}
+      const res = await axios.patch(`${API_ENDPOINT_EVENTS}/${id}`, updatedEvent);
       this.$store.commit('updateEvent', res.data);
       this.syncEvents();
     }
