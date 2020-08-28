@@ -1,29 +1,35 @@
-# events-frontend-test
+# Vue-Notes
+An events app that allows to create events on a calendar. It uses Rails Api endpoints to persist data.
 
-## Project setup
-```
-yarn install
-```
+### Features
++ Reactive changes displayed in events table
++ CRUD functionality for Events
++ 2 different colors for full day and non full day events
++ VueX used as app store and state management
++ Jest used for unit testing
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+##### Built With
++ HTML5
++ SASS
++ Vue
++ VueX
++ Jest
++ FullCalendar
++ Rails Api
 
-### Compiles and minifies for production
-```
-yarn build
-```
+### Getting Started
+clone repo
 
-### Run your unit tests
-```
-yarn test:unit
-```
+`cd` into folder and run `yarn install`
 
-### Run your end-to-end tests
-```
-yarn test:e2e
-```
+run `yarn serve`
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## For Tests 
+
+run `yarn test:unit`
+
+# Live Version
+#### URL: [Start making events](https://vue-notes.ayezahmed.now.sh/)
+
+# Author
+Saintaze [@saintaze](https://github.com/saintaze/)
