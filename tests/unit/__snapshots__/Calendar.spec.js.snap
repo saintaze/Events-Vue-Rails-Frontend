@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Calendar should render html correctly 1`] = `<fullcalendar-stub options="[object Object]"></fullcalendar-stub>`;

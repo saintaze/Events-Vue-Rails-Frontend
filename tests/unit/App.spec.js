@@ -20,7 +20,7 @@ describe('App', () => {
   });
 
   it('should contain Toolbar component', () => {
-    expect(wrapper.findComponent(Toolbar).exists()).toBe(true)
+    expect(wrapper.findComponent(Toolbar).exists()).toBe(true);
   });
 
   

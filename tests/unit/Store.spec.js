@@ -1,6 +1,6 @@
 import {state, getters, mutations, actions} from '@/store'
 
-const deepClone = list => list.map(item => ({...item}))
+const deepClone = list => list.map(item => ({...item})) // only one level deep
 
 //mock events data
 const mockEvents = [
