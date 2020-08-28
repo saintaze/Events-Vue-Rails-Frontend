@@ -3,17 +3,18 @@ import CalendarEvents from "@/components/CalendarEvents.vue"
 import Events from '@/components/Events.vue';
 import Calendar from '@/components/Calendar.vue';
 
-let wrapper;
-
-beforeEach(() => {
-  wrapper = shallowMount(CalendarEvents)
-})
-
-afterEach(() => {
-  wrapper.destroy();
-});
 
 describe('CalendarEvents', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallowMount(CalendarEvents);
+  })
+
+  afterEach(() => {
+    wrapper.destroy();
+  });
+  
   it('should render html correctly', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
@@ -25,5 +26,4 @@ describe('CalendarEvents', () => {
   it('should contain Events component', () => {
     expect(wrapper.findComponent(Events).exists()).toBe(true);
   });
-
 })

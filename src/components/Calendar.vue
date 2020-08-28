@@ -2,7 +2,6 @@
   <FullCalendar :options='options' />
 </template>
 
-
 <script>
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'

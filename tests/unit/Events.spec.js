@@ -1,64 +1,21 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import {mockEvents, createStore, createWrapper} from './testHelpers';
 import Events from '@/components/Events.vue';
-import Vuex from 'vuex';
 import moment from 'moment';
 
-let getters;
-let store;
-let wrapper;
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
-// create store helper
-const createStore = (overrides={}) => {
-  const defaultStoreConfig = {
-    state: {},
-    getters: {},
-    mutations: {},
-    actions: {}
-  }
-  return new Vuex.Store({...defaultStoreConfig, ...overrides});
-}
-
-// create wrapper helper
-const createWrapper = (overrides={}) => {
-  const defaultMountingOptions = {
-    localVue,
-    store: createStore()
-  }
-  return shallowMount(Events, {...defaultMountingOptions, ...overrides});
-}
-
-afterEach(() => { wrapper.destroy() });
-
-//mock events data
-const mockEvents = [
-  {
-    "id": 1,
-    "title": "this is all we have ",
-    "start": "2020-07-28",
-    "end": "2020-07-29",
-    "allDay": 1
-  },
-  {
-    "id": 4,
-    "title": "walking all night ",
-    "start": "2020-08-25T07:00:00+05:00",
-    "end": "2020-08-25T10:00:00+05:00",
-    "allDay": 0
-  },
-]
-
 describe('Events', () => {
- 
+  let getters;
+  let store;
+  let wrapper;
+
+  afterEach(() => { wrapper.destroy() });
+
   // describe block when events array is not empty
   describe('Events are present (events.length > 0)', ()=>{
 
     beforeEach(() => {
       getters = { events: () => mockEvents }
       store = createStore({ getters });
-      wrapper = createWrapper({ store });
+      wrapper = createWrapper(Events, { store });
     });
 
     it('should render html correctly', () => {
@@ -96,7 +53,7 @@ describe('Events', () => {
     beforeEach(() => {
       getters = { events: () => [] }
       store = createStore({ getters });
-      wrapper = createWrapper({ store });
+      wrapper = createWrapper(Events, { store });
     });
 
     it('should render html correctly', () => {

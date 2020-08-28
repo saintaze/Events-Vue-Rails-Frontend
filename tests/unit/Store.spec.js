@@ -1,34 +1,14 @@
 import {state, getters, mutations, actions} from '@/store'
-
-const deepClone = list => list.map(item => ({...item})) // only one level deep
-
-//mock events data
-const mockEvents = [
-  {
-    "id": 1,
-    "title": "walking in darkness",
-    "start": "2020-07-28",
-    "end": "2020-07-29",
-    "allDay": 1
-  },
-  {
-    "id": 4,
-    "title": "eating cake in the sun",
-    "start": "2020-08-25T07:00:00+05:00",
-    "end": "2020-08-25T10:00:00+05:00",
-    "allDay": 0
-  },
-]
+import {mockEvents, deepClone} from './testHelpers';
 
 jest.mock('axios', () => {
   return {
-    get: jest.fn(() => ({ data: mockEvents}))
+    get: jest.fn(() => ({ data: mockEvents }))
   }
 })
 
-beforeEach(() => state.events = [])
-
 describe('Store', ()=>{
+  beforeEach(() => state.events = [])
   
   // events getter with empty array
   it('"events" getter should return an empty array', () => {

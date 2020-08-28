@@ -1,71 +1,27 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import {mockEvents, createStore, createWrapper} from './testHelpers';
 import Calendar from '@/components/Calendar.vue';
-import Vuex from 'vuex';
 import axios from 'axios'
 
-let getters;
-let store;
-let wrapper;
-let mutations;
-let actions;
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
-jest.mock('axios')
-
-// create store helper
-const createStore = (overrides = {}) => {
-  const defaultStoreConfig = {
-    state: {},
-    getters: {},
-    mutations: {},
-    actions: {}
-  }
-  return new Vuex.Store({ ...defaultStoreConfig, ...overrides });
-}
-
-// create wrapper helper
-const createWrapper = (overrides = {}) => {
-  const defaultMountingOptions = {
-    localVue,
-    store: createStore()
-  }
-  return shallowMount(Calendar, { ...defaultMountingOptions, ...overrides });
-}
-
-afterEach(() => { wrapper.destroy() });
-
-//mock events data
-const mockEvents = [
-  {
-    "id": 1,
-    "title": "this is all we have ",
-    "start": "2020-07-28",
-    "end": "2020-07-29",
-    "allDay": 1
-  },
-  {
-    "id": 4,
-    "title": "walking all night ",
-    "start": "2020-08-25T07:00:00+05:00",
-    "end": "2020-08-25T10:00:00+05:00",
-    "allDay": 0
-  },
-]
-
 describe('Calendar', () => {
+  let getters;
+  let store;
+  let wrapper;
+  let mutations;
+  let actions;
 
   beforeEach(() => {
     actions = { fetchEvents: jest.fn() };
-    mutations = { updateEvent: jest.fn(), deleteEvent: jest.fn(), addEvent: jest.fn() }
-    getters = { events: () => mockEvents }
+    mutations = { updateEvent: jest.fn(), deleteEvent: jest.fn(), addEvent: jest.fn() };
+    getters = { events: () => mockEvents };
     store = createStore({ getters, mutations, actions });
-    wrapper = createWrapper({ store });
+    wrapper = createWrapper(Calendar, { store });
     wrapper.vm.syncEvents = jest.fn();
   });
 
-    
+  afterEach(() => { wrapper.destroy() });
+
+  jest.mock('axios');
+
   it('should render html correctly', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
@@ -120,7 +76,6 @@ describe('Calendar', () => {
       }
     }
 
-
     await wrapper.vm.handleRemoveEvent(eventData);
     expect(mutations.deleteEvent.mock.calls).toHaveLength(1);
     expect(mutations.deleteEvent.mock.calls[0][1]).toStrictEqual(responseData.event.id);
@@ -159,7 +114,6 @@ describe('Calendar', () => {
       }
     }
 
-
     await wrapper.vm.handleAddEvent(dateSelectInfo);
     expect(mutations.addEvent.mock.calls).toHaveLength(1);
     expect(mutations.addEvent.mock.calls[0][1]).toStrictEqual(responseData.event);
@@ -174,12 +128,11 @@ describe('Calendar', () => {
     });
     wrapper.vm.calendarOptions.events = getters.events();
     expect(wrapper.vm.calendarOptions.events).toStrictEqual(mockEvents);
-      
   });
 
   it('"created hook" should sync store events to calendar events', () => {
     store = createStore({ actions : { fetchEvents: jest.fn() }})
-    wrapper = createWrapper({
+    wrapper = createWrapper(Calendar, {
       store,
       data: () => {
         return {
@@ -196,8 +149,6 @@ describe('Calendar', () => {
     })
     expect(wrapper.vm.calendarOptions).toStrictEqual(wrapper.vm.options);
     expect(actions.fetchEvents.mock.calls).toHaveLength(1);
-
   }); 
-
 
 });
