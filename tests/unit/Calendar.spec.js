@@ -62,6 +62,7 @@ describe('Calendar', () => {
     getters = { events: () => mockEvents }
     store = createStore({ getters, mutations, actions });
     wrapper = createWrapper({ store });
+    wrapper.vm.syncEvents = jest.fn();
   });
 
     
@@ -70,7 +71,6 @@ describe('Calendar', () => {
   });
 
   it('"handleUpdateEvent" should send "patch" request and update event in Vuex Store', async () => {
-    wrapper.vm.syncEvents = jest.fn();
     axios.patch = jest.fn(() => ({ data: responseData }))
 
     const eventData = {
@@ -95,7 +95,6 @@ describe('Calendar', () => {
 
   it('"handleRemoveEvent" should send "delete" request and delete event in Vuex Store', async () => {
     window.confirm = jest.fn(() =>  true);
-    wrapper.vm.syncEvents = jest.fn();
     axios.delete = jest.fn(() => ({ data: responseData }))
     
     const eventData = {
@@ -130,7 +129,6 @@ describe('Calendar', () => {
 
   it('"handleAddEvent" should send "post" request and add event in Vuex Store', async () => {
     window.prompt = jest.fn(() => 'new event');
-    wrapper.vm.syncEvents = jest.fn();
     axios.post = jest.fn(() => ({ data: responseData }));
 
     const dateSelectInfo = {
@@ -179,7 +177,7 @@ describe('Calendar', () => {
       
   });
 
-  it('"created hook" should sync store events to calendar events', async () => {
+  it('"created hook" should sync store events to calendar events', () => {
     store = createStore({ actions : { fetchEvents: jest.fn() }})
     wrapper = createWrapper({
       store,
@@ -198,6 +196,7 @@ describe('Calendar', () => {
     })
     expect(wrapper.vm.calendarOptions).toStrictEqual(wrapper.vm.options);
     expect(actions.fetchEvents.mock.calls).toHaveLength(1);
+
   }); 
 
 
