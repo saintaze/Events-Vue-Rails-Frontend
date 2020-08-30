@@ -24,8 +24,7 @@ export const createWrapper = (component, overrides = {}) => {
   return shallowMount(component, { ...defaultMountingOptions, ...overrides });
 }
 
-// only one level deep
-export const deepClone = list => list.map(item => ({ ...item }))
+export const deepClone = list => list.map(item => ({ ...item })) // only one level deep
 
 //mock events data
 export const mockEvents = [
