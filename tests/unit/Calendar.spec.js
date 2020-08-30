@@ -27,20 +27,19 @@ describe('Calendar', () => {
   });
 
   it('"handleUpdateEvent" should send "patch" request and update event in Vuex Store', async () => {
-    axios.patch = jest.fn(() => ({ data: responseData }))
+    axios.patch = jest.fn(() => ({ data: {event: responseData} }))
 
     const eventData = {
       event: {
-        title: 'cooking',
         startStr: '2020-03-21',
         endStr: '2020-03-26',
         id: 4
       }
     }
     const responseData = {
-      start: '2020-03-21',
-      end: '2020-03-26',
-      id: '4'
+        start: '2020-03-21',
+        end: '2020-03-26',
+        id: '4'
     }
     
     await wrapper.vm.handleUpdateEvent(eventData);
@@ -48,7 +47,7 @@ describe('Calendar', () => {
     expect(mutations.updateEvent.mock.calls[0][1]).toStrictEqual(responseData);
     expect(wrapper.vm.syncEvents).toHaveBeenCalled();
   });
-
+  
   it('"handleRemoveEvent" should send "delete" request and delete event in Vuex Store', async () => {
     window.confirm = jest.fn(() =>  true);
     axios.delete = jest.fn(() => ({ data: responseData }))
