@@ -3,7 +3,7 @@ import {mockEvents, deepClone} from './testHelpers';
 
 jest.mock('axios', () => {
   return {
-    get: jest.fn(() => ({ data: mockEvents }))
+    get: jest.fn(() => ({ data: {events: mockEvents} }))
   }
 })
 
