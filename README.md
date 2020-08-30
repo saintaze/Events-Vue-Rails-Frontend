@@ -1,35 +1,24 @@
-# Vue-Notes
-An events app that allows to create events on a calendar. It uses Rails Api endpoints to persist data.
+# Events-Frontend
 
-### Features
-+ Reactive changes displayed in events table
-+ CRUD functionality for Events
-+ 2 different colors for full day and non full day events
-+ VueX used as app store and state management
-+ Jest used for unit testing
+## Project setup
+```
+yarn install
+```
 
-##### Built With
-+ HTML5
-+ SASS
-+ Vue
-+ VueX
-+ Jest
-+ FullCalendar
-+ Rails Api
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
 
-### Getting Started
-clone repo
+### Compiles and minifies for production
+```
+yarn build
+```
 
-`cd` into folder and run `yarn install`
+### Lints and fixes files
+```
+yarn lint
+```
 
-run `yarn serve`
-
-## For Tests 
-
-run `yarn test:unit`
-
-# Live Version
-#### URL: [Start making events](https://vue-notes.ayezahmed.now.sh/)
-
-# Author
-Saintaze [@saintaze](https://github.com/saintaze/)
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
