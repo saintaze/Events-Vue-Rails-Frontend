@@ -113,7 +113,7 @@ export default {
       const {id, startStr: start, endStr: end} = eventData.event;
       const updatedEvent = {event: {start, end}}
       const res = await axios.patch(`${API_ENDPOINT_EVENTS}/${id}`, updatedEvent);
-      this.$store.commit('updateEvent', res.data);
+      this.$store.commit('updateEvent', res.data.event);
       this.syncEvents();
     }
   }

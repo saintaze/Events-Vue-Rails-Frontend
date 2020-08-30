@@ -38,7 +38,7 @@ export const mutations = {
 export const actions = {
   async fetchEvents({ commit }){
     const res = await axios.get(API_ENDPOINT_EVENTS);
-    commit('setEvents', res.data);
+    commit('setEvents', res.data.events);
   }
 }
 
