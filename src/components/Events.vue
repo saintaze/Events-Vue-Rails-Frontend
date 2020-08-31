@@ -4,7 +4,7 @@
     <table class="events-table">
       <thead>
         <tr>
-          <th>Id</th>
+          <th>No</th>
           <th>Title</th>
           <th>Start Date</th>
           <th>End Date</th>
@@ -12,8 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="event in myEvents" :key="event.id">
-          <td>{{event.id}}</td>
+        <tr v-for="(event, index) in myEvents" :key="event.id">
+          <td>{{index + 1}}</td>
           <td>{{event.title}}</td>
           <td>{{event.start | dateFormat}}</td>
           <td>{{event.end | dateFormat}}</td>
