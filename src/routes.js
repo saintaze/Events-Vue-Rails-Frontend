@@ -12,6 +12,10 @@ export const routes = [
   {
     path: '/events',
     component: CalendarEvents
+  },
+  {
+    path: '*',
+    redirect: '/events'
   }
 ];
 
